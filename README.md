@@ -203,6 +203,50 @@ GET /api/resources
 Headers: X-API-Key: sua_chave_secreta
 ```
 
+### 📱 Dispositivos Móveis (Mobile)
+
+```bash
+# Listar todos os dispositivos
+GET /api/mobile
+Headers: X-API-Key: sua_chave_secreta
+
+# Buscar por ID
+GET /api/mobile/:id
+Headers: X-API-Key: sua_chave_secreta
+
+# Buscar por chave (autenticação mobile)
+GET /api/mobile/chave/:chave
+Headers: X-API-Key: sua_chave_secreta
+
+# Criar novo dispositivo
+POST /api/mobile
+Headers: 
+  X-API-Key: sua_chave_secreta
+  Content-Type: application/json
+Body:
+{
+  "nome": "iPhone 14 - João",
+  "chave": "mob_abc123xyz456"
+}
+
+# Atualizar dispositivo
+PUT /api/mobile/:id
+Headers: 
+  X-API-Key: sua_chave_secreta
+  Content-Type: application/json
+Body:
+{
+  "nome": "iPhone 15 Pro",
+  "is_active": true
+}
+
+# Desativar dispositivo (soft delete)
+DELETE /api/mobile/:id
+Headers: X-API-Key: sua_chave_secreta
+```
+
+**Documentação completa**: Ver [ENDPOINTS-MOBILE.md](./ENDPOINTS-MOBILE.md)
+
 ## 🔐 Segurança
 
 A API implementa várias camadas de segurança:
@@ -235,6 +279,20 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"value": 150, "notes": "Teste via cURL"}' \
   http://localhost:3001/api/indicators/1/update
+
+# Dispositivos Móveis
+curl -H "X-API-Key: sua_chave_secreta" http://localhost:3001/api/mobile
+
+# Criar dispositivo
+curl -X POST \
+  -H "X-API-Key: sua_chave_secreta" \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"iPhone 14","chave":"mob_test_123"}' \
+  http://localhost:3001/api/mobile
+
+# Autenticar por chave
+curl -H "X-API-Key: sua_chave_secreta" \
+  http://localhost:3001/api/mobile/chave/mob_test_123
 ```
 
 ## 🐳 Deploy com PM2

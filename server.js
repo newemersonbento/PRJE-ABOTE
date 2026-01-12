@@ -605,6 +605,234 @@ app.get('/api/users', authenticate, async (req, res) => {
   }
 });
 
+// ==================== MOBILE ENDPOINTS ====================
+
+// GET /api/mobile - Listar todos os dispositivos móveis
+app.get('/api/mobile', authenticate, async (req, res) => {
+  try {
+    const pool = await db.getPool();
+    const result = await pool.request().query(`
+      SELECT 
+        id,
+        nome,
+        chave,
+        created_at,
+        updated_at,
+        is_active
+      FROM Mobile
+      WHERE is_active = 1
+      ORDER BY created_at DESC
+    `);
+    
+    res.json(result.recordset);
+  } catch (error) {
+    console.error('Erro ao buscar dispositivos móveis:', error);
+    res.status(500).json({ 
+      error: 'Erro ao buscar dispositivos móveis',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// GET /api/mobile/:id - Buscar dispositivo móvel por ID
+app.get('/api/mobile/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await db.getPool();
+    const result = await pool.request()
+      .input('id', id)
+      .query(`
+        SELECT 
+          id,
+          nome,
+          chave,
+          created_at,
+          updated_at,
+          is_active
+        FROM Mobile
+        WHERE id = @id
+      `);
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Dispositivo móvel não encontrado' });
+    }
+    
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error('Erro ao buscar dispositivo móvel:', error);
+    res.status(500).json({ 
+      error: 'Erro ao buscar dispositivo móvel',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// POST /api/mobile - Criar novo dispositivo móvel
+app.post('/api/mobile', authenticate, async (req, res) => {
+  try {
+    const { nome, chave } = req.body;
+    
+    if (!nome || !chave) {
+      return res.status(400).json({ error: 'Nome e chave são obrigatórios' });
+    }
+    
+    const pool = await db.getPool();
+    const result = await pool.request()
+      .input('nome', nome)
+      .input('chave', chave)
+      .query(`
+        INSERT INTO Mobile (nome, chave)
+        OUTPUT INSERTED.id, INSERTED.nome, INSERTED.chave, INSERTED.created_at
+        VALUES (@nome, @chave)
+      `);
+    
+    res.status(201).json({
+      message: 'Dispositivo móvel criado com sucesso',
+      data: result.recordset[0]
+    });
+  } catch (error) {
+    console.error('Erro ao criar dispositivo móvel:', error);
+    
+    // Verificar erro de chave duplicada
+    if (error.number === 2627) {
+      return res.status(409).json({ 
+        error: 'Chave já existe',
+        message: 'Esta chave já está cadastrada no sistema'
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Erro ao criar dispositivo móvel',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// PUT /api/mobile/:id - Atualizar dispositivo móvel
+app.put('/api/mobile/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, chave, is_active } = req.body;
+    
+    if (!nome && !chave && is_active === undefined) {
+      return res.status(400).json({ error: 'Nenhum campo para atualizar' });
+    }
+    
+    // Construir query dinâmica
+    let updateFields = [];
+    const pool = await db.getPool();
+    const request = pool.request().input('id', id);
+    
+    if (nome) {
+      updateFields.push('nome = @nome');
+      request.input('nome', nome);
+    }
+    if (chave) {
+      updateFields.push('chave = @chave');
+      request.input('chave', chave);
+    }
+    if (is_active !== undefined) {
+      updateFields.push('is_active = @is_active');
+      request.input('is_active', is_active);
+    }
+    
+    const result = await request.query(`
+      UPDATE Mobile
+      SET ${updateFields.join(', ')}
+      OUTPUT INSERTED.id, INSERTED.nome, INSERTED.chave, INSERTED.updated_at, INSERTED.is_active
+      WHERE id = @id
+    `);
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Dispositivo móvel não encontrado' });
+    }
+    
+    res.json({
+      message: 'Dispositivo móvel atualizado com sucesso',
+      data: result.recordset[0]
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar dispositivo móvel:', error);
+    
+    // Verificar erro de chave duplicada
+    if (error.number === 2627) {
+      return res.status(409).json({ 
+        error: 'Chave já existe',
+        message: 'Esta chave já está cadastrada no sistema'
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Erro ao atualizar dispositivo móvel',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// DELETE /api/mobile/:id - Deletar (soft delete) dispositivo móvel
+app.delete('/api/mobile/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await db.getPool();
+    const result = await pool.request()
+      .input('id', id)
+      .query(`
+        UPDATE Mobile
+        SET is_active = 0
+        OUTPUT DELETED.id, DELETED.nome
+        WHERE id = @id AND is_active = 1
+      `);
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Dispositivo móvel não encontrado ou já inativo' });
+    }
+    
+    res.json({
+      message: 'Dispositivo móvel desativado com sucesso',
+      data: result.recordset[0]
+    });
+  } catch (error) {
+    console.error('Erro ao deletar dispositivo móvel:', error);
+    res.status(500).json({ 
+      error: 'Erro ao deletar dispositivo móvel',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// GET /api/mobile/chave/:chave - Buscar por chave (útil para autenticação mobile)
+app.get('/api/mobile/chave/:chave', authenticate, async (req, res) => {
+  try {
+    const { chave } = req.params;
+    const pool = await db.getPool();
+    const result = await pool.request()
+      .input('chave', chave)
+      .query(`
+        SELECT 
+          id,
+          nome,
+          chave,
+          created_at,
+          updated_at,
+          is_active
+        FROM Mobile
+        WHERE chave = @chave AND is_active = 1
+      `);
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Dispositivo móvel não encontrado' });
+    }
+    
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error('Erro ao buscar dispositivo móvel por chave:', error);
+    res.status(500).json({ 
+      error: 'Erro ao buscar dispositivo móvel',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 // ==================== ERROR HANDLER ====================
 
 app.use((error, req, res, next) => {
