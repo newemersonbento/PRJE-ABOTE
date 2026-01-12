@@ -1,135 +1,114 @@
-# 📥 DOWNLOAD E INSTALAÇÃO - API SQL Server
+# 📦 DOWNLOAD - API Completa com Guias VPN
 
-## 🎯 Arquivo Pronto para Download
+## 🎯 Pacote Disponível
 
-✅ **webapp-api-completo.tar.gz** (43 KB)  
-📍 Localização: `/home/user/webapp-api-completo.tar.gz`
+**Arquivo:** `webapp-api-completo-vpn.tar.gz` (67 KB)  
+**Localização:** `/home/user/webapp-api-completo-vpn.tar.gz`
 
-## 📦 O que está incluído:
+---
 
-```
-webapp-api-completo.tar.gz
-│
-├── server.js                    # ✅ Servidor Express
-├── database.js                  # ✅ Conexão SQL Server
-├── schema.sql                   # ✅ Schema 11 tabelas
-├── test-connection.js           # ✅ Teste de conexão
-├── .env                         # ✅ Suas credenciais já configuradas
-├── .env.example                 # ✅ Template
-├── .gitignore                   # ✅ Proteção Git
-├── package.json                 # ✅ Dependências
-├── package-lock.json            # ✅ Versões fixas
-├── README.md                    # ✅ Documentação técnica
-├── INSTRUCOES.md                # ✅ Guia passo a passo
-├── CREDENCIAIS-EXEMPLO.md       # ✅ Exemplos
-├── STATUS.md                    # ✅ Status do projeto
-└── INSTALACAO-LOCAL.md          # ✅ Guia de instalação
-```
+## 📂 Conteúdo do Pacote
 
-**Total**: 13 arquivos + documentação completa
+### **📋 Código da API (7 arquivos):**
+- `server.js` - Servidor Express com todos os endpoints (18 KB)
+- `database.js` - Conexão SQL Server com pool (2.5 KB)
+- `test-connection.js` - Script de teste de conexão (1.6 KB)
+- `package.json` - Dependências Node.js
+- `package-lock.json` - Lock de versões
+- `.env.example` - Template de variáveis de ambiente
+- `ecosystem.config.cjs` - Configuração PM2
 
-## 🚀 Instalação em 5 Passos
+### **🗄️ Scripts SQL (3 arquivos):**
+- `schema.sql` - Criação de 13 tabelas + índices + triggers (23 KB)
+- `seed.sql` - Dados iniciais (4 unidades, 5 usuários, 8 categorias, 25 indicadores) (19 KB)
+- Tabelas: org_units, auth_users, categories, indicators, indicator_history, it_assets, tickets, projects, backups, network_links, resources, stock_movements, activity_log
 
-### 1️⃣ Baixar o Arquivo
+### **🔐 Guias de Conexão VPN (3 arquivos):**
+- `TUNNEL-VPN.md` - Guia completo WireGuard + Tailscale + ZeroTier (15 KB)
+- `TUNNEL-CLOUDFLARE.md` - Cloudflare Tunnel (gratuito) (6.5 KB)
+- `TUNNEL-NGROK.md` - ngrok para testes rápidos (4.2 KB)
+- `INICIO-RAPIDO-VPN.md` - Setup em 5 minutos com Tailscale (4.3 KB)
 
-**Opção A: Via Sandbox (se tiver acesso)**
+### **📚 Documentação (7 arquivos):**
+- `README.md` - Visão geral do projeto (7.3 KB)
+- `SCHEMA-COMPLETO.md` - Documentação do banco de dados (14 KB)
+- `INSTRUCOES.md` - Instruções de instalação (7.4 KB)
+- `INSTALACAO-LOCAL.md` - Instalação local passo a passo (6.6 KB)
+- `CREDENCIAIS-EXEMPLO.md` - Exemplo de credenciais (4 KB)
+- `STATUS.md` - Status atual do projeto (8 KB)
+- `DOWNLOAD.md` - Este arquivo
+
+### **🔧 Scripts Auxiliares (2 arquivos):**
+- `wireguard-client-setup.sh` - Instalação WireGuard no sandbox
+- `wireguard-client-configure.sh` - Configuração cliente WireGuard
+
+### **🔒 Segurança:**
+- `.gitignore` - Previne commit de credenciais
+- `.env` - **NÃO incluído** (você deve criar baseado no .env.example)
+
+---
+
+## 🚀 Como Usar Este Pacote
+
+### **Opção 1: Instalação Local (RECOMENDADO)**
+
 ```bash
-# Na sua máquina local
-scp user@sandbox:/home/user/webapp-api-completo.tar.gz ~/Downloads/
-```
-
-**Opção B: Via Git**
-Se você fizer push para o GitHub, pode clonar depois:
-```bash
-git clone https://github.com/seu-usuario/webapp-api.git
-```
-
-**Opção C: Copiar arquivos manualmente**
-Copie todos os arquivos de `/home/user/webapp-api/` para sua máquina.
-
-### 2️⃣ Extrair os Arquivos
-
-**Windows (PowerShell):**
-```powershell
-# Extrair (você pode usar 7-Zip também)
-tar -xzf webapp-api-completo.tar.gz
+# 1. Extrair pacote
+tar -xzf webapp-api-completo-vpn.tar.gz
 cd webapp-api
-```
 
-**Linux/Mac:**
-```bash
-tar -xzf webapp-api-completo.tar.gz
-cd webapp-api
-```
-
-### 3️⃣ Instalar Dependências
-
-```bash
+# 2. Instalar dependências
 npm install
-```
 
-Isso vai instalar:
-- express
-- mssql
-- cors
-- dotenv
-- helmet
-- express-rate-limit
-- nodemon (dev)
+# 3. Escolher método de conexão VPN:
 
-**Total**: ~257 pacotes
+## OPÇÃO A - Tailscale (Mais Rápido - 5 minutos)
+# Siga: INICIO-RAPIDO-VPN.md
 
-### 4️⃣ Criar Tabelas no SQL Server
+## OPÇÃO B - WireGuard (Mais Controle - 30 minutos)
+# Siga: TUNNEL-VPN.md seção WireGuard
 
-**Via SSMS (SQL Server Management Studio):**
-1. Conecte ao servidor: `192.168.100.14`
-2. Banco: `ABOT`
-3. Abra o arquivo `schema.sql`
-4. Execute (F5)
+## OPÇÃO C - Cloudflare Tunnel (Mais Seguro - 20 minutos)
+# Siga: TUNNEL-CLOUDFLARE.md
 
-**Via sqlcmd:**
-```bash
-sqlcmd -S 192.168.100.14 -U abot -P New@3260 -d ABOT -i schema.sql
-```
+## OPÇÃO D - ngrok (Testes Rápidos - 5 minutos)
+# Siga: TUNNEL-NGROK.md
 
-### 5️⃣ Iniciar a API
+# 4. Configurar .env
+cp .env.example .env
+nano .env  # Edite com suas credenciais
 
-```bash
-# Testar conexão primeiro
+# 5. Aplicar schema no SQL Server
+# - Abra SQL Server Management Studio (SSMS)
+# - Conecte ao servidor 192.168.100.14
+# - Abra e execute: schema.sql
+# - Abra e execute: seed.sql
+
+# 6. Testar conexão
 node test-connection.js
 
-# Se passou, iniciar API
+# 7. Iniciar API
 npm start
+# ou com PM2
+pm2 start ecosystem.config.cjs
+
+# 8. Verificar
+curl -H "x-api-key: webapp-api-key-2024-secure-change-in-production" http://localhost:3001/health
 ```
 
-✅ **Pronto!** API rodando em `http://localhost:3001`
+---
 
-## 🧪 Testar se está Funcionando
+### **Opção 2: Uso no Sandbox (DESENVOLVIMENTO)**
 
-Abra outro terminal:
+Se você já está no sandbox e quer testar:
 
 ```bash
-# Health check
-curl http://localhost:3001/health
+# 1. Escolher método VPN (recomendo Tailscale)
+# Siga: INICIO-RAPIDO-VPN.md
 
-# Deve retornar:
-{
-  "status": "ok",
-  "database": "connected",
-  "timestamp": "2024-01-12T15:30:00.000Z"
-}
-
-# Testar categorias (com API Key)
-curl -H "X-API-Key: webapp-api-key-2024-secure-change-in-production" \
-     http://localhost:3001/api/categories
-```
-
-## 📊 Credenciais Já Configuradas
-
-O arquivo `.env` já vem configurado com suas credenciais:
-
-```env
-DB_SERVER=192.168.100.14
+# 2. Configurar .env com IP da VPN
+cat > .env << 'EOF'
+DB_SERVER=<IP_VPN_SERVIDOR>  # Ex: 100.x.x.x (Tailscale) ou 192.168.100.14 (WireGuard)
 DB_PORT=1433
 DB_DATABASE=ABOT
 DB_USER=abot
@@ -138,180 +117,207 @@ DB_ENCRYPT=false
 DB_TRUST_CERTIFICATE=true
 
 PORT=3001
-NODE_ENV=development
-
+NODE_ENV=production
 API_KEY=webapp-api-key-2024-secure-change-in-production
+
+ALLOWED_ORIGINS=http://localhost:3000,https://3000-ig1zg8d9l1gqcefs84wxz-b9b802c4.sandbox.novita.ai
+EOF
+
+# 3. Testar conexão
+node test-connection.js
+
+# 4. Iniciar API
+pm2 start ecosystem.config.cjs
 ```
 
-✅ **Não precisa alterar nada!**
+---
 
-⚠️ **IMPORTANTE**: Em produção, mude a `API_KEY` para algo mais seguro!
+## 📊 Comparação de Métodos VPN
 
-## 🔗 Conectar o Portal à API
+| Método | Facilidade | Velocidade | Segurança | Setup | Custo |
+|--------|------------|------------|-----------|-------|-------|
+| **Tailscale** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | 🔒🔒🔒🔒🔒 | 5 min | Grátis* |
+| **WireGuard** | ⭐⭐ | ⚡⚡⚡⚡⚡ | 🔒🔒🔒🔒🔒 | 30 min | Grátis |
+| **Cloudflare** | ⭐⭐⭐ | ⚡⚡⚡⚡ | 🔒🔒🔒🔒🔒 | 20 min | Grátis |
+| **ngrok** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡ | 🔒🔒🔒 | 5 min | Grátis** |
 
-### Portal Local (localhost)
+*Grátis até 100 dispositivos  
+**URL muda a cada reinício (free)
 
-Se você rodar o portal localmente, edite `public/static/app.js`:
+---
 
-```javascript
-// Configuração no início do arquivo
-const API_BASE_URL = 'http://localhost:3001/api';
-const API_KEY = 'webapp-api-key-2024-secure-change-in-production';
+## 🎯 Recomendação por Cenário
 
-// Função fetchAPI
-async function fetchAPI(endpoint, options = {}) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-API-Key': API_KEY,
-    ...options.headers
-  };
-  
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers
-  });
-  
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  
-  return response.json();
-}
-```
+### **🚀 Quero testar AGORA (5 minutos):**
+→ Use **Tailscale** (INICIO-RAPIDO-VPN.md)
 
-### Portal em Produção (Cloudflare Pages)
+### **🏢 Preciso para produção (controle total):**
+→ Use **WireGuard** (TUNNEL-VPN.md)
 
-Você precisa expor a API via **ngrok** ou **localtunnel**:
+### **🔒 Máxima segurança empresarial:**
+→ Use **Cloudflare Tunnel** (TUNNEL-CLOUDFLARE.md)
+
+### **🧪 Apenas testes rápidos:**
+→ Use **ngrok** (TUNNEL-NGROK.md)
+
+---
+
+## 📋 Checklist de Instalação
+
+### **Preparação:**
+- [ ] Baixar e extrair `webapp-api-completo-vpn.tar.gz`
+- [ ] Instalar Node.js 16+ na máquina
+- [ ] Ter acesso ao SQL Server (192.168.100.14:1433)
+- [ ] Escolher método VPN
+
+### **Configuração VPN:**
+- [ ] Instalar cliente VPN escolhido
+- [ ] Conectar à VPN
+- [ ] Testar conectividade (ping no SQL Server)
+- [ ] Anotar IP/hostname para usar no .env
+
+### **Setup API:**
+- [ ] Executar `npm install`
+- [ ] Criar `.env` baseado no `.env.example`
+- [ ] Aplicar `schema.sql` no SQL Server (SSMS)
+- [ ] Aplicar `seed.sql` no SQL Server
+- [ ] Testar conexão: `node test-connection.js`
+- [ ] Iniciar API: `npm start` ou `pm2 start ecosystem.config.cjs`
+
+### **Verificação:**
+- [ ] Endpoint `/health` respondendo
+- [ ] Endpoint `/api/categories` retornando 8 categorias
+- [ ] Endpoint `/api/indicators` retornando 25 indicadores
+- [ ] Logs sem erros: `pm2 logs webapp-api`
+
+---
+
+## 🔧 Comandos Úteis
 
 ```bash
-# Instalar ngrok
-npm install -g ngrok
+# Instalar dependências
+npm install
 
-# Expor a porta 3001
-ngrok http 3001
+# Testar conexão SQL
+node test-connection.js
 
-# Você receberá uma URL pública:
-# https://abc123.ngrok.io
-```
+# Iniciar API (modo dev)
+npm start
 
-Use essa URL no portal:
-```javascript
-const API_BASE_URL = 'https://abc123.ngrok.io/api';
-```
-
-## 🐳 Manter a API Rodando (PM2)
-
-Para que a API fique rodando em background:
-
-```bash
-# Instalar PM2
-npm install -g pm2
-
-# Iniciar
-pm2 start server.js --name webapp-api
+# Iniciar API (modo produção com PM2)
+pm2 start ecosystem.config.cjs
 
 # Ver logs
 pm2 logs webapp-api
 
-# Reiniciar
-pm2 restart webapp-api
-
-# Parar
+# Parar API
 pm2 stop webapp-api
 
-# Status
-pm2 list
+# Reiniciar API
+pm2 restart webapp-api
+
+# Remover API do PM2
+pm2 delete webapp-api
+
+# Ver status
+pm2 status
+
+# Testar endpoint
+curl -H "x-api-key: webapp-api-key-2024-secure-change-in-production" http://localhost:3001/health
 ```
 
-## 📁 Estrutura de Pastas
+---
 
-Após extrair e instalar:
+## 🐛 Troubleshooting
 
-```
-webapp-api/
-├── 📄 Arquivos principais
-│   ├── server.js              (Servidor Express)
-│   ├── database.js            (Conexão SQL Server)
-│   ├── schema.sql             (Schema 11 tabelas)
-│   └── test-connection.js     (Teste)
-│
-├── ⚙️ Configuração
-│   ├── .env                   (Suas credenciais)
-│   ├── .gitignore             (Proteção Git)
-│   ├── package.json
-│   └── package-lock.json
-│
-├── 📚 Documentação
-│   ├── README.md              (Docs técnicos)
-│   ├── INSTRUCOES.md          (Guia passo a passo)
-│   ├── INSTALACAO-LOCAL.md    (Este arquivo)
-│   ├── CREDENCIAIS-EXEMPLO.md
-│   └── STATUS.md
-│
-└── 📦 node_modules/           (Gerado após npm install)
-```
+### **Problema: "Cannot connect to SQL Server"**
 
-## ❓ Problemas Comuns
-
-### "Cannot find module 'express'"
 ```bash
+# 1. Verificar se VPN está ativa
+tailscale status  # Tailscale
+sudo wg show      # WireGuard
+
+# 2. Testar conectividade
+ping 192.168.100.14
+telnet 192.168.100.14 1433
+
+# 3. Verificar .env
+cat .env
+
+# 4. Testar conexão diretamente
+node test-connection.js
+```
+
+### **Problema: "Module not found"**
+
+```bash
+# Reinstalar dependências
+rm -rf node_modules package-lock.json
 npm install
 ```
 
-### "ECONNREFUSED" ou "ETIMEOUT"
-1. SQL Server está rodando?
-2. Firewall liberado na porta 1433?
-3. Teste: `telnet 192.168.100.14 1433`
+### **Problema: "Port 3001 already in use"**
 
-### "Login failed"
-Verifique usuário e senha no `.env`
-
-### "Port 3001 already in use"
-Mude a porta no `.env`:
-```env
-PORT=3002
+```bash
+# Parar processo usando a porta
+fuser -k 3001/tcp  # Linux
+# ou
+pm2 delete all
 ```
 
-## 🎯 Checklist de Instalação
+### **Problema: "API retorna 500"**
 
-- [ ] Arquivo baixado e extraído
-- [ ] Node.js instalado (v14+)
-- [ ] `npm install` executado
-- [ ] SQL Server acessível
-- [ ] Schema executado no banco
-- [ ] Teste de conexão passou
-- [ ] API iniciada
-- [ ] Health check respondendo
-- [ ] Portal configurado
+```bash
+# Ver logs de erro
+pm2 logs webapp-api --err
 
-## 📞 Suporte
+# Verificar .env
+cat .env
+
+# Testar conexão SQL
+node test-connection.js
+```
+
+---
+
+## 📚 Documentação Completa
+
+1. **INICIO-RAPIDO-VPN.md** - Setup rápido (5 minutos)
+2. **TUNNEL-VPN.md** - Guia completo de VPN (WireGuard, Tailscale, ZeroTier)
+3. **TUNNEL-CLOUDFLARE.md** - Cloudflare Tunnel
+4. **TUNNEL-NGROK.md** - ngrok para testes
+5. **SCHEMA-COMPLETO.md** - Estrutura do banco de dados
+6. **INSTRUCOES.md** - Instruções gerais de instalação
+7. **README.md** - Visão geral do projeto
+
+---
+
+## 🆘 Suporte
 
 Se tiver problemas:
 
-1. Verifique os logs: `npm start` ou `pm2 logs webapp-api`
-2. Teste a conexão: `node test-connection.js`
-3. Verifique o firewall
-4. Consulte `INSTRUCOES.md` para troubleshooting detalhado
-
-## 🎉 Próximos Passos
-
-Depois que a API estiver rodando:
-
-1. ✅ Testar todos os endpoints
-2. ✅ Conectar o portal
-3. ✅ Popular o banco com dados
-4. ✅ Configurar em produção
-5. ✅ Fazer backup do banco
+1. **Verifique a documentação** no arquivo correspondente
+2. **Execute os testes** de conexão (`node test-connection.js`)
+3. **Veja os logs** com `pm2 logs webapp-api`
+4. **Teste a VPN** com `ping` e `telnet`
 
 ---
 
-**🚀 Boa sorte com a instalação!**
+## ✅ Próximos Passos Após Instalação
 
-Se precisar de ajuda, consulte os outros arquivos de documentação ou entre em contato.
+1. ✅ **Conectar Frontend:** Configure o frontend para usar a API
+2. ✅ **Testar Endpoints:** Use Postman ou curl para testar todas as rotas
+3. ✅ **Configurar Produção:** Ajuste variáveis de ambiente para produção
+4. ✅ **Monitoramento:** Configure logs e alertas
+5. ✅ **Backup:** Configure backup regular do banco de dados
 
 ---
 
-**Versão**: 1.0.0  
-**Data**: 2024-01-12  
-**Servidor**: 192.168.100.14  
-**Banco**: ABOT
+**📦 Versão do Pacote:** 2.0 (com guias VPN)  
+**📅 Data:** 2026-01-12  
+**💾 Tamanho:** 67 KB  
+**📝 Arquivos:** 24 arquivos (7 código + 3 SQL + 4 VPN + 7 docs + 3 config)
+
+---
+
+**🎯 Tudo pronto para usar! Escolha seu método VPN e comece em minutos!** 🚀
